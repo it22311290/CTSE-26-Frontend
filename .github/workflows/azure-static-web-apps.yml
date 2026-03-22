@@ -41,6 +41,7 @@ jobs:
             npm install
             VITE_USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }} \
             VITE_PRODUCT_SERVICE_URL=${{ secrets.PRODUCT_SERVICE_URL }} \
+            VITE_PAYMENT_SERVICE_URL=${{ secrets.PAYMENT_SERVICE_URL }} \
             VITE_ORDER_SERVICE_URL=${{ secrets.ORDER_SERVICE_URL }} \
             npm run build
 

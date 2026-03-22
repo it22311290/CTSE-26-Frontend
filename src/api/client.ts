@@ -1,11 +1,36 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/authStore";
 
-const client = axios.create({ baseURL: "/" });
+// These will be injected by GitHub Actions during build
+const SERVICE_URLS = {
+  USER: import.meta.env.VITE_USER_SERVICE_URL,
+  PRODUCT: import.meta.env.VITE_PRODUCT_SERVICE_URL,
+  ORDER: import.meta.env.VITE_ORDER_SERVICE_URL,
+  PAYMENT: import.meta.env.VITE_PAYMENT_SERVICE_URL,
+};
+
+const client = axios.create();
 
 client.interceptors.request.use((config) => {
+  // 1. Determine which service to hit based on the URL path
+  const url = config.url || "";
+  
+  if (url.startsWith("/api/auth") || url.startsWith("/api/users") || url.startsWith("/health/user")) {
+    config.baseURL = SERVICE_URLS.USER;
+  } else if (url.startsWith("/api/products") || url.startsWith("/health/product")) {
+    config.baseURL = SERVICE_URLS.PRODUCT;
+  } else if (url.startsWith("/api/orders") || url.startsWith("/health/order")) {
+    config.baseURL = SERVICE_URLS.ORDER;
+  } else if (url.startsWith("/api/payments") || url.startsWith("/health/payment")) {
+    config.baseURL = SERVICE_URLS.PAYMENT;
+  } else {
+    config.baseURL = "/"; // Fallback for local/relative paths
+  }
+
+  // 2. Attach Authorization Token
   const token = useAuthStore.getState().token;
   if (token) config.headers.Authorization = `Bearer ${token}`;
+  
   return config;
 });
 
