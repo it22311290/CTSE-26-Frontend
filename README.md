@@ -1,73 +1,61 @@
-# React + TypeScript + Vite
+# ShopFlow — React Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured React 18 + TypeScript + Vite frontend for the ShopFlow e-commerce microservices platform.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **React 18** + **TypeScript** + **Vite**
+- **TanStack Query v5** — server state, caching, mutations
+- **Zustand** — client state (auth, cart) with localStorage persistence
+- **React Router v6** — routing with layout routes and auth guards
+- **Axios** — HTTP client with auth interceptor
+- **Tailwind CSS** — utility-first styling
+- **react-hot-toast** — toast notifications
+- **lucide-react** — icons
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Two Separate UIs
 
-## React Compiler
+### Customer UI (`/shop`, `/cart`, `/orders`, `/payments`, `/account`)
+User-friendly storefront with product browsing, cart management, checkout, order tracking, and payment history.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Admin Dashboard (`/admin/*`)
+Dark sidebar layout with:
+- Dashboard with live KPIs and service health
+- Product management (CRUD)
+- Order management with status updates
+- Payment management with refunds
+- User management
+- Analytics with charts
 
-## Expanding the ESLint configuration
+## Quick Start
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev        # http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Make sure all 4 microservices are running (docker-compose up --build).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## API Proxy (Vite)
+All API calls go through Vite dev server proxy — no CORS issues in development.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Prefix | Target |
+|--------|--------|
+| /api/auth, /api/users | http://localhost:3001 |
+| /api/products | http://localhost:3002 |
+| /api/orders | http://localhost:3003 |
+| /api/payments | http://localhost:3004 |
+
+## Build for Production
+
+```bash
+npm run build
+# Serve dist/ with any static file server
+# Set your actual service URLs in vite.config.ts proxy
 ```
+
+## Auth Flow
+- Guest users can browse products and view cart
+- Sign in or register sends JWT to User Service
+- JWT stored in localStorage via Zustand persist
+- Role-based routing: customers → /shop, admins → /admin/dashboard
+- Admin users can still access the customer storefront
