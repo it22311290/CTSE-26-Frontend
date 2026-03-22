@@ -38,11 +38,11 @@ jobs:
           ###### Environment Variables (Backend URLs) ######
           # This injects your backend service URLs into the frontend build
           app_build_command: "export VITE_USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }} && export VITE_PRODUCT_SERVICE_URL=${{ secrets.PRODUCT_SERVICE_URL }} && export VITE_PAYMENT_SERVICE_URL=${{ secrets.PAYMENT_SERVICE_URL }} && export VITE_ORDER_SERVICE_URL=${{ secrets.ORDER_SERVICE_URL }} && npm install && npm run build"
-          env: 
-            VITE_USER_SERVICE_URL: ${{ secrets.USER_SERVICE_URL }}
-            VITE_PRODUCT_SERVICE_URL: ${{ secrets.PRODUCT_SERVICE_URL }}
-            VITE_PAYMENT_SERVICE_URL: ${{ secrets.PAYMENT_SERVICE_URL }}
-            VITE_ORDER_SERVICE_URL: ${{ secrets.ORDER_SERVICE_URL }}
+        env: 
+          VITE_USER_SERVICE_URL: ${{ secrets.USER_SERVICE_URL }}
+          VITE_PRODUCT_SERVICE_URL: ${{ secrets.PRODUCT_SERVICE_URL }}
+          VITE_PAYMENT_SERVICE_URL: ${{ secrets.PAYMENT_SERVICE_URL }}
+          VITE_ORDER_SERVICE_URL: ${{ secrets.ORDER_SERVICE_URL }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
