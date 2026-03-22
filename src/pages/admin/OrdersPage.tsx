@@ -111,7 +111,7 @@ export function AdminOrdersPage() {
       ) : (
         <Table>
           <thead>
-            <tr><Th>Order</Th><Th>Customer</Th><Th>Items</Th><Th>Total</Th><Th>Date</Th><Th>Status</Th><Th></Th></tr>
+            <tr><Th>Order</Th><Th>Customer</Th><Th>Items</Th><Th>Total</Th><Th>Date</Th><Th>Status</Th><Th><></></Th></tr>
           </thead>
           <tbody>
             {filtered.map((order) => (
